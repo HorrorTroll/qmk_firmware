@@ -144,12 +144,12 @@ void matrix_init(void) {
     SN_CT16B0->MR3 = 0xFF;
 
 	// Set prescale value
-    SN_CT16B0->PRE = 0x30;
-    SN_CT16B1->PRE = 0x30;
-    SN_CT16B2->PRE = 0x30;
-    SN_CT32B0->PRE = 0x30;
-    SN_CT32B1->PRE = 0x30;
-    SN_CT32B2->PRE = 0x30;
+    SN_CT16B0->PRE = 0x28;
+    SN_CT16B1->PRE = 0x28;
+    SN_CT16B2->PRE = 0x28;
+    SN_CT32B0->PRE = 0x28;
+    SN_CT32B1->PRE = 0x28;
+    SN_CT32B2->PRE = 0x28;
 
 	// Enable PWM on all timers
 	SN_CT16B0->PWMCTRL =

@@ -16,8 +16,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include QMK_KEYBOARD_H
 
-#include "quantum.h"
 #include "rev1.h"
+#include "snake.h"
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
@@ -27,13 +27,26 @@ enum layer_names {
     _BASE = 0,
     _GAME = 1,
     _FL,
-    _CL
+    _CL,
+    _SNAKE
 };
 
 enum layer_keycodes {
   BASE = SAFE_RANGE,
-  GAME
+  GAME,
+  QUARTER,
+  HALF,
+  SNAKE,
+  DIRRGHT,
+  DIRUP,
+  DIRLEFT,
+  DIRDOWN
 };
+// readability
+#define XXX KC_NO
+
+char quarter_count = 0;
+char half_count = 0;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -117,7 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        ├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴────┤     ┌───┐
        │    │   │   │   │   │   │   │   │   │   │   │   │   │      │     │Vai│
        ├────┼───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬──┴─┬────┤ ┌───┼───┼───┐
-       │    │GAME│    │                        │    │ Fn │    │    │ │Hui│Vad│Hud│
+       │    │GAME│    │                        │    │ Fn │SNEK│    │ │Hui│Vad│Hud│
        └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘
 */
     /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15        16     */
@@ -127,7 +140,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
-                _______, GAME,    _______,                            _______,                            _______, MO(_FL), _______, _______, RGB_HUI, RGB_VAD,  RGB_HUD
+                _______, GAME,    _______,                            _______,                            _______, MO(_FL), SNAKE,   _______, RGB_HUI, RGB_VAD,  RGB_HUD
             ),
 
 /*
@@ -143,7 +156,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        ├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴────┤     ┌───┐
        │    │   │   │   │   │   │   │   │   │   │   │   │   │      │     │Vai│
        ├────┼───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬──┴─┬────┤ ┌───┼───┼───┐
-       │    │BASE│    │                        │    │ Fn │    │    │ │Hui│Vad│Hud│
+       │    │BASE│    │                        │    │ Fn │SNEK│    │ │Hui│Vad│Hud│
        └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘
 */
     /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15        16     */
@@ -153,7 +166,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
-                _______, BASE,    _______,                            _______,                            _______, MO(_CL), _______, _______, RGB_HUI, RGB_VAD,  RGB_HUD
+                _______, BASE,    _______,                            _______,                            _______, MO(_CL), SNAKE,   _______, RGB_HUI, RGB_VAD,  RGB_HUD
+            ),
+
+/*
+       ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
+       │   │   │   │   │   │   │ │   │   │   │   │ │   │   │   │   │ │   │   │   │
+       └───┘   └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┘
+       ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───────┐ ┌───┬───┬───┐
+       │   │   │   │   │   │   │   │   │   │   │   │   │   │       │ │   │   │   │
+       ├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─────┤ ├───┼───┼───┤
+       │     │   │   │   │   │   │   │   │   │   │   │   │   │     │ │   │   │   │
+       ├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴─────┤ └───┴───┴───┘
+       │      │   │   │   │   │   │   │   │   │   │   │   │        │
+       ├──────┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴────────┤     ┌───┐
+       │        │   │   │   │   │   │   │   │   │   │   │          │     │ ↑ │
+       ├────┬───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬────┬────┤ ┌───┼───┼───┐
+       │    │    │    │                        │    │    │HALF│    │ │ ← │ ↓ │ → │
+       └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘
+*/
+    /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15        16     */
+    [_SNAKE] = LAYOUT_all(
+				XXX,              XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,
+                XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,
+                XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,
+                XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,    
+                XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,              DIRUP,
+                XXX,     XXX,     XXX,                                XXX,                                XXX,     XXX,     HALF,    XXX,     DIRLEFT, DIRDOWN,  DIRRGHT
             ),
 };
 
@@ -171,6 +210,43 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		writePinLow(D6);
 		writePinLow(D7);
       }
+      return false;
+      break;
+	case DIRUP:
+      if (snake_status.last_moved_direction != DIRECTION_DOWN) {
+        snake_status.direction = DIRECTION_UP;
+      }
+      return false;
+      break;
+    case DIRDOWN:
+      if (snake_status.last_moved_direction != DIRECTION_UP) {
+        snake_status.direction = DIRECTION_DOWN;
+      }
+      return false;
+      break;
+    case DIRLEFT:
+      if (snake_status.last_moved_direction != DIRECTION_RIGHT) {
+        snake_status.direction = DIRECTION_LEFT;
+      }
+      return false;
+      break;
+    case DIRRGHT:
+      if (snake_status.last_moved_direction != DIRECTION_LEFT) {
+         snake_status.direction = DIRECTION_RIGHT;
+      }
+      return false;
+      break;
+    case HALF:
+      if (record->event.pressed) {
+        layer_move(_BASE);
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_CYCLE_LEFT_RIGHT);
+      }
+      return false;
+      break;
+    case SNAKE:
+      layer_move(_SNAKE);
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SNAKE);
+	  snake_init();
       return false;
       break;
   }
