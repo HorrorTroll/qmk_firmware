@@ -298,6 +298,9 @@ OSAL_IRQ_HANDLER(SN32_CT16B0_HANDLER) {
     // Turn the selected row off
     writePinLow(led_row_pins[current_row]);
 
+    // Turn the next row on
+    current_row = (current_row + 1) % LED_MATRIX_ROWS_HW;
+
     // Read the key matrix
     for (uint8_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
         // Enable the column
@@ -320,9 +323,6 @@ OSAL_IRQ_HANDLER(SN32_CT16B0_HANDLER) {
             writePinHigh(col_pins[col_index]);
         }
     }
-
-    // Turn the next row on
-    current_row = (current_row + 1) % LED_MATRIX_ROWS_HW;
 
     uint8_t row_idx = hw_row_to_matrix_row[current_row];
     uint16_t row_ofst = row_ofsts[row_idx];
