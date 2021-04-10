@@ -1,4 +1,4 @@
-#include "snake.h"
+#include "effects/snake/snake.h"
 
 #include <stdlib.h>
 

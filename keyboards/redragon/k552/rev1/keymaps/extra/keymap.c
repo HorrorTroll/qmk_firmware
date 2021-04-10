@@ -17,7 +17,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 
 #include "rev1.h"
-#include "snake.h"
+#include "effects/snake/snake.h"
+
+// For CUSTOM_GRADIENT
+HSV gradient_0 = {205, 250, 255};
+HSV gradient_100 = {140, 215, 125};
+bool reflected_gradient = false;
+uint8_t gp_i = 0;
+
+typedef struct {
+    HSV gradient_0;
+    HSV gradient_1;
+    bool reflected;
+} CUSTOM_PRESETS;
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
@@ -34,7 +46,21 @@ enum layer_names {
 enum layer_keycodes {
   BASE = SAFE_RANGE,
   GAME,
-  QUARTER,
+  G1_HUI,                 //Custom gradient color 1 hue increase
+  G1_HUD,                 //Custom gradient color 1 hue decrease
+  G1_SAI,                 //Custom gradient color 1 saturation increase
+  G1_SAD,                 //Custom gradient color 1 saturation decrease
+  G1_VAI,                 //Custom gradient color 1 value increase
+  G1_VAD,                 //Custom gradient color 1 value decrease
+  G2_HUI,                 //Custom gradient color 2 hue increase
+  G2_HUD,                 //Custom gradient color 2 hue decrease
+  G2_SAI,                 //Custom gradient color 2 saturation increase
+  G2_SAD,                 //Custom gradient color 2 saturation decrease
+  G2_VAI,                 //Custom gradient color 2 value increase
+  G2_VAD,                 //Custom gradient color 2 value decrease
+  G_PRE,                  //Gradient presets
+  REF_G,                  //Toggle between linear and reflected gradient
+  G_FLIP,                 //Flip the gradient colors
   HALF,
   SNAKE,
   DIRRGHT,
@@ -44,9 +70,6 @@ enum layer_keycodes {
 };
 // readability
 #define XXX KC_NO
-
-char quarter_count = 0;
-char half_count = 0;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -137,10 +160,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FL]   = LAYOUT_all(
                 RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_MYCM, _______, _______,  _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_MOD, RGB_RMOD, RGB_TOG,
-                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,
-                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
-                _______, GAME,    _______,                            _______,                            _______, MO(_FL), SNAKE,   _______, RGB_HUI, RGB_VAD,  RGB_HUD
+                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,
+                _______, G2_HUD,  G2_HUI,  G2_SAD,  G2_SAI,  G2_VAD,  G2_VAI,  _______, _______, _______, _______, _______, _______, _______,
+                _______, _______, G_PRE,   REF_G,   G_FLIP,  _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
+                _______, GAME,    _______,                            _______,                            _______, _______, SNAKE,   _______, RGB_HUI, RGB_VAD,  RGB_HUD
             ),
 
 /*
@@ -163,10 +186,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_CL]   = LAYOUT_all(
                 RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_MYCM, _______, _______,  _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_MOD, RGB_RMOD, RGB_TOG,
-                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,
-                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
-                _______, BASE,    _______,                            _______,                            _______, MO(_CL), SNAKE,   _______, RGB_HUI, RGB_VAD,  RGB_HUD
+                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,
+                _______, G2_HUD,  G2_HUI,  G2_SAD,  G2_SAI,  G2_VAD,  G2_VAI,  _______, _______, _______, _______, _______, _______, _______,
+                _______, _______, G_PRE,   REF_G,   G_FLIP,  _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
+                _______, BASE,    _______,                            _______,                            _______, _______, SNAKE,   _______, RGB_HUI, RGB_VAD,  RGB_HUD
             ),
 
 /*
@@ -197,6 +220,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  uint8_t color_adj_step = 5;
+  CUSTOM_PRESETS gradient_presets[] = {
+    {{205, 250, 255}, {140, 215, 125}, false },
+    {{41, 255, 255}, {233, 245, 255}, false },
+    {{45, 245, 155}, {160, 255, 80}, false },
+    {{173, 245, 40}, {41, 255, 205}, true },
+    {{32, 255, 165}, {217, 185, 70}, false },
+    {{240, 255, 145}, {115, 255, 245}, true },
+    {{118, 255, 255}, {242, 255, 255}, false },
+    {{118, 255, 255}, {242, 255, 255}, false },
+    {{212, 0, 0}, {223, 235, 165}, true },
+  };
+  uint8_t gp_length = sizeof(gradient_presets)/sizeof(gradient_presets[0]);
+
   switch (keycode) {
     case BASE:
       if (record->event.pressed) {
@@ -212,6 +249,101 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
+	case G1_HUI:
+      if (record->event.pressed) {
+        gradient_0.h += color_adj_step;
+        dprintf("Gradient 0 HSV: %d, %d, %d\n", gradient_0.h, gradient_0.s, gradient_0.v);
+      }
+      return false;
+    case G1_HUD:
+      if (record->event.pressed) {
+        gradient_0.h -= color_adj_step;
+        dprintf("Gradient 0 HSV: %d, %d, %d\n", gradient_0.h, gradient_0.s, gradient_0.v);
+      }
+      return false;
+    case G1_SAI:
+      if (record->event.pressed) {
+        gradient_0.s = (gradient_0.s + color_adj_step * 2 <= 255) ? gradient_0.s + color_adj_step * 2 : 255;
+        dprintf("Gradient 0 HSV: %d, %d, %d\n", gradient_0.h, gradient_0.s, gradient_0.v);
+      }
+      return false;
+    case G1_SAD:
+      if (record->event.pressed) {
+        gradient_0.s = (gradient_0.s - color_adj_step * 2 >= 0) ? gradient_0.s - color_adj_step * 2 : 0;
+        dprintf("Gradient 0 HSV: %d, %d, %d\n", gradient_0.h, gradient_0.s, gradient_0.v);
+      }
+      return false;
+    case G1_VAI:
+      if (record->event.pressed) {
+        gradient_0.v = (gradient_0.v + color_adj_step * 2 <= 255) ? gradient_0.v + color_adj_step * 2 : 255;
+        dprintf("Gradient 0 HSV: %d, %d, %d\n", gradient_0.h, gradient_0.s, gradient_0.v);
+      }
+      return false;
+    case G1_VAD:
+      if (record->event.pressed) {
+        gradient_0.v = (gradient_0.v - color_adj_step * 2 >= 0) ? gradient_0.v - color_adj_step * 2 : 0;
+        dprintf("Gradient 0 HSV: %d, %d, %d\n", gradient_0.h, gradient_0.s, gradient_0.v);
+      }
+      return false;
+    case G2_HUI:
+      if (record->event.pressed) {
+        gradient_100.h += color_adj_step;
+        dprintf("Gradient 100 HSV: %d, %d, %d\n", gradient_100.h, gradient_100.s, gradient_100.v);
+      }
+      return false;
+    case G2_HUD:
+      if (record->event.pressed) {
+        gradient_100.h -= color_adj_step;
+        dprintf("Gradient 100 HSV: %d, %d, %d\n", gradient_100.h, gradient_100.s, gradient_100.v);
+      }
+      return false;
+    case G2_SAI:
+      if (record->event.pressed) {
+        gradient_100.s = (gradient_100.s + color_adj_step * 2 <= 255) ? gradient_100.s + color_adj_step * 2 : 255;
+        dprintf("Gradient 100 HSV: %d, %d, %d\n", gradient_100.h, gradient_100.s, gradient_100.v);
+      }
+      return false;
+    case G2_SAD:
+      if (record->event.pressed) {
+        gradient_100.s = (gradient_100.s - color_adj_step * 2 >= 0) ? gradient_100.s - color_adj_step * 2 : 0;
+        dprintf("Gradient 100 HSV: %d, %d, %d\n", gradient_100.h, gradient_100.s, gradient_100.v);
+      }
+      return false;
+    case G2_VAI:
+      if (record->event.pressed) {
+        gradient_100.v = (gradient_100.v + color_adj_step * 2 <= 255) ? gradient_100.v + color_adj_step * 2 : 255;
+        dprintf("Gradient 100 HSV: %d, %d, %d\n", gradient_100.h, gradient_100.s, gradient_100.v);
+      }
+      return false;
+    case G2_VAD:
+      if (record->event.pressed) {
+        gradient_100.v = (gradient_100.v - color_adj_step * 2 >= 0) ? gradient_100.v - color_adj_step * 2 : 0;
+        dprintf("Gradient 100 HSV: %d, %d, %d\n", gradient_100.h, gradient_100.s, gradient_100.v);
+      }
+      return false;
+    case G_PRE:
+      if (record->event.pressed) {
+        gp_i = (gp_i + gp_length ) % gp_length;
+
+        gradient_0 = gradient_presets[gp_i].gradient_0;
+        gradient_100 = gradient_presets[gp_i].gradient_1;
+        reflected_gradient = gradient_presets[gp_i].reflected;
+
+        gp_i += 1;
+      }
+      return false;
+    case REF_G:
+      if (record->event.pressed) {
+        reflected_gradient = !reflected_gradient;
+      }
+      return false;
+    case G_FLIP:
+      if (record->event.pressed) {
+        HSV temp_color = gradient_0;
+        gradient_0 = gradient_100;
+        gradient_100 = temp_color;
+      }
+      return false;
 	case DIRUP:
       if (snake_status.last_moved_direction != DIRECTION_DOWN) {
         snake_status.direction = DIRECTION_UP;
