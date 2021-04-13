@@ -70,9 +70,9 @@ enum layer_keycodes {
   
   //Custom user effect keycode
   RGB_C_G,                //Change effect to custom gradient
-  RGB_D,                //Change effect to diagonal
+  RGB_D,                  //Change effect to diagonal
   RGB_R_R,                //Change effect to rainbow reactive simple
-  RGB_K                 //Change effect to knight rider
+  RGB_K                   //Change effect to knight rider
 };
 // readability
 #define XXX KC_NO
