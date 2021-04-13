@@ -61,12 +61,18 @@ enum layer_keycodes {
   G_PRE,                  //Gradient presets
   REF_G,                  //Toggle between linear and reflected gradient
   G_FLIP,                 //Flip the gradient colors
-  HALF,
-  SNAKE,
-  DIRRGHT,
-  DIRUP,
-  DIRLEFT,
-  DIRDOWN
+  EXIT,                   //Exit snake game and back for typing
+  SNAKE,                  //Play snake game
+  DIRRGHT,                //Move snake to go right
+  DIRUP,                  //Move snake to go up
+  DIRLEFT,                //Move snake to go left
+  DIRDOWN,                //Move snake to go down
+  
+  //Custom user effect keycode
+  RGB_C_G,                //Change effect to custom gradient
+  RGB_D,                //Change effect to diagonal
+  RGB_R_R,                //Change effect to rainbow reactive simple
+  RGB_K                 //Change effect to knight rider
 };
 // readability
 #define XXX KC_NO
@@ -158,9 +164,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
     /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15        16     */
     [_FL]   = LAYOUT_all(
-                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_MYCM, _______, _______,  _______,
-                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_MOD, RGB_RMOD, RGB_TOG,
-                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,
+                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_MYCM, RGB_MOD, RGB_RMOD, RGB_TOG,
+                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_C_G, RGB_D,    RGB_R_R,
+                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, _______, _______, _______, _______, _______, RGB_K,   _______,  _______,
                 _______, G2_HUD,  G2_HUI,  G2_SAD,  G2_SAI,  G2_VAD,  G2_VAI,  _______, _______, _______, _______, _______, _______, _______,
                 _______, _______, G_PRE,   REF_G,   G_FLIP,  _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
                 _______, GAME,    _______,                            _______,                            _______, _______, SNAKE,   _______, RGB_HUI, RGB_VAD,  RGB_HUD
@@ -184,9 +190,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 */
     /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15        16     */
     [_CL]   = LAYOUT_all(
-                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_MYCM, _______, _______,  _______,
-                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_MOD, RGB_RMOD, RGB_TOG,
-                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,
+                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_MYCM, RGB_MOD, RGB_RMOD, RGB_TOG,
+                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_C_G, RGB_D,    RGB_R_R,
+                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, _______, _______, _______, _______, _______, RGB_K,   _______,  _______,
                 _______, G2_HUD,  G2_HUI,  G2_SAD,  G2_SAI,  G2_VAD,  G2_VAI,  _______, _______, _______, _______, _______, _______, _______,
                 _______, _______, G_PRE,   REF_G,   G_FLIP,  _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
                 _______, BASE,    _______,                            _______,                            _______, _______, SNAKE,   _______, RGB_HUI, RGB_VAD,  RGB_HUD
@@ -215,7 +221,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,
                 XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,    
                 XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,              DIRUP,
-                XXX,     XXX,     XXX,                                XXX,                                XXX,     XXX,     HALF,    XXX,     DIRLEFT, DIRDOWN,  DIRRGHT
+                XXX,     XXX,     XXX,                                XXX,                                XXX,     XXX,     EXIT,    XXX,     DIRLEFT, DIRDOWN,  DIRRGHT
             ),
 };
 
@@ -368,7 +374,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
-    case HALF:
+    case EXIT:
       if (record->event.pressed) {
         layer_move(_BASE);
         rgb_matrix_mode_noeeprom(RGB_MATRIX_CYCLE_LEFT_RIGHT);
@@ -379,6 +385,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       layer_move(_SNAKE);
       rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_SNAKE);
 	  snake_init();
+      return false;
+      break;
+	case RGB_C_G:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_CUSTOM_GRADIENT);
+      return false;
+      break;
+	case RGB_D:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_DIAGONAL);
+      return false;
+      break;
+	case RGB_R_R:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_RAINBOW_REACTIVE_SIMPLE);
+      return false;
+      break;
+	case RGB_K:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_KITT);
       return false;
       break;
   }
