@@ -16,8 +16,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include QMK_KEYBOARD_H
 
-#include "quantum.h"
-
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
@@ -31,7 +29,8 @@ enum layer_names {
 
 enum layer_keycodes {
   BASE = SAFE_RANGE,
-  GAME
+  GAME,
+  OPENRGB
 };
 // readability
 #define XXX KC_NO
@@ -118,7 +117,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*  Row:      0        1        2        3        4        5        6        7        8        9         10       11       12       13       14        15        16      */
     [_FL] =   { { RESET,   KC_MUTE, KC_MSEL, KC_MPLY, KC_VOLD, KC_VOLU, KC_WHOM, KC_MAIL, RGB_MOD, RGB_RMOD, RGB_TOG, RGB_HUI, RGB_HUD, XXX,     XXX,  	   XXX, 	 XXX},
                 { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     XXX,  	   KC_PAUSE, XXX},
-                { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     KC_INS,   KC_PSCR,  XXX},
+                { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     OPENRGB,  XXX,     XXX,     XXX,     XXX,     KC_INS,   KC_PSCR,  XXX},
                 { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     XXX,      XXX,      XXX},
                 { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     XXX,      RGB_VAI,  XXX},
                 { XXX,     GAME,    XXX,     XXX,     XXX,     MO(_FL), XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     RGB_SPD,  RGB_VAD,  RGB_SPI}
@@ -142,7 +141,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*  Row:      0        1        2        3        4        5        6        7        8        9         10       11       12       13       14        15        16      */
     [_CL] =   { { RESET,   KC_MUTE, KC_MSEL, KC_MPLY, KC_VOLD, KC_VOLU, KC_WHOM, KC_MAIL, RGB_MOD, RGB_RMOD, RGB_TOG, RGB_HUI, RGB_HUD, XXX,     XXX,  	   XXX, 	 XXX},
                 { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     XXX,  	   KC_PAUSE, XXX},
-                { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     KC_INS,   KC_PSCR,  XXX},
+                { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     OPENRGB,  XXX,     XXX,     XXX,     XXX,     KC_INS,   KC_PSCR,  XXX},
                 { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     XXX,      XXX,      XXX},
                 { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     XXX,      RGB_VAI,  XXX},
                 { XXX,     BASE,    XXX,     XXX,     XXX,     MO(_CL), XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     RGB_SPD,  RGB_VAD,  RGB_SPI}
@@ -162,6 +161,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         set_single_persistent_default_layer(_GAME);
 		writePinLow(D6);
       }
+      return false;
+      break;
+    case OPENRGB:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_OPENRGB_DIRECT);
       return false;
       break;
   }

@@ -72,7 +72,8 @@ enum layer_keycodes {
   RGB_C_G,                //Change effect to custom gradient
   RGB_D,                  //Change effect to diagonal
   RGB_R_R,                //Change effect to rainbow reactive simple
-  RGB_K                   //Change effect to knight rider
+  RGB_K,                  //Change effect to knight rider
+  OPENRGB                 //Change effect to direct mode
 };
 // readability
 #define XXX KC_NO
@@ -148,54 +149,54 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /*
        ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
-       │Rst│   │MeP│VoD│VoU│Mut│ │Stp│Prv│Ply│Nxt│ │Mai│Hom│Cal│MyC│ │   │   │   │
+       │Rst│   │MeP│VoD│VoU│Mut│ │Stp│Prv│Ply│Nxt│ │Mai│Hom│Cal│Sch│ │Mod│Rod│Tog│
        └───┘   └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┘
        ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───────┐ ┌───┬───┬───┐
-       │   │   │   │   │   │   │   │   │   │   │   │Spd│Spi│       │ │Mod│Rod│Tog│
+       │   │   │   │   │   │   │   │   │   │   │   │Spd│Spi│       │ │C_G│ D │R_R│
        ├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─────┤ ├───┼───┼───┤
-       │     │   │   │   │   │   │   │   │   │   │   │   │   │     │ │   │   │   │
+       │     │   │   │   │   │   │   │   │   │   │   │   │   │     │ │ K │   │   │
        ├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┐    │ └───┴───┴───┘
        │      │   │   │   │   │   │   │   │   │   │   │   │   │    │
        ├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴────┤     ┌───┐
        │    │   │   │   │   │   │   │   │   │   │   │   │   │      │     │Vai│
        ├────┼───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬──┴─┬────┤ ┌───┼───┼───┐
-       │    │GAME│    │                        │    │ Fn │SNEK│    │ │Hui│Vad│Hud│
+       │    │GAME│    │                        │    │ Fn │SNEK│    │ │Hud│Vad│Hui│
        └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘
 */
     /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15        16     */
     [_FL]   = LAYOUT_all(
-                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_MYCM, RGB_MOD, RGB_RMOD, RGB_TOG,
+                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_WSCH, RGB_MOD, RGB_RMOD, RGB_TOG,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_C_G, RGB_D,    RGB_R_R,
-                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, _______, _______, _______, _______, _______, RGB_K,   _______,  _______,
+                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, OPENRGB, _______, _______, _______, _______, RGB_K,   _______,  _______,
                 _______, G2_HUD,  G2_HUI,  G2_SAD,  G2_SAI,  G2_VAD,  G2_VAI,  _______, _______, _______, _______, _______, _______, _______,
                 _______, _______, G_PRE,   REF_G,   G_FLIP,  _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
-                _______, GAME,    _______,                            _______,                            _______, _______, SNAKE,   _______, RGB_HUI, RGB_VAD,  RGB_HUD
+                _______, GAME,    _______,                            _______,                            _______, _______, SNAKE,   _______, RGB_HUD, RGB_VAD,  RGB_HUI
             ),
 
 /*
        ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
-       │Rst│   │MeP│VoD│VoU│Mut│ │Stp│Prv│Ply│Nxt│ │Mai│Hom│Cal│MyC│ │   │   │   │
+       │Rst│   │MeP│VoD│VoU│Mut│ │Stp│Prv│Ply│Nxt│ │Mai│Hom│Cal│Sch│ │Mod│Rod│Tog│
        └───┘   └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┘
        ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───────┐ ┌───┬───┬───┐
-       │   │   │   │   │   │   │   │   │   │   │   │Spd│Spi│       │ │Mod│Rod│Tog│
+       │   │   │   │   │   │   │   │   │   │   │   │Spd│Spi│       │ │C_G│ D │R_R│
        ├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─────┤ ├───┼───┼───┤
-       │     │   │   │   │   │   │   │   │   │   │   │   │   │     │ │   │   │   │
+       │     │   │   │   │   │   │   │   │   │   │   │   │   │     │ │ K │   │   │
        ├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┐    │ └───┴───┴───┘
        │      │   │   │   │   │   │   │   │   │   │   │   │   │    │
        ├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴────┤     ┌───┐
        │    │   │   │   │   │   │   │   │   │   │   │   │   │      │     │Vai│
        ├────┼───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬──┴─┬────┤ ┌───┼───┼───┐
-       │    │BASE│    │                        │    │ Fn │SNEK│    │ │Hui│Vad│Hud│
+       │    │BASE│    │                        │    │ Fn │SNEK│    │ │Hud│Vad│Hui│
        └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘
 */
     /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15        16     */
     [_CL]   = LAYOUT_all(
-                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_MYCM, RGB_MOD, RGB_RMOD, RGB_TOG,
+                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_WSCH, RGB_MOD, RGB_RMOD, RGB_TOG,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_C_G, RGB_D,    RGB_R_R,
-                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, _______, _______, _______, _______, _______, RGB_K,   _______,  _______,
+                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, OPENRGB, _______, _______, _______, _______, RGB_K,   _______,  _______,
                 _______, G2_HUD,  G2_HUI,  G2_SAD,  G2_SAI,  G2_VAD,  G2_VAI,  _______, _______, _______, _______, _______, _______, _______,
                 _______, _______, G_PRE,   REF_G,   G_FLIP,  _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
-                _______, BASE,    _______,                            _______,                            _______, _______, SNAKE,   _______, RGB_HUI, RGB_VAD,  RGB_HUD
+                _______, BASE,    _______,                            _______,                            _______, _______, SNAKE,   _______, RGB_HUD, RGB_VAD,  RGB_HUI
             ),
 
 /*
@@ -401,6 +402,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
 	case RGB_K:
       rgb_matrix_mode_noeeprom(RGB_MATRIX_CUSTOM_KITT);
+      return false;
+      break;
+    case OPENRGB:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_OPENRGB_DIRECT);
       return false;
       break;
   }

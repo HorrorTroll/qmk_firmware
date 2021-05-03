@@ -16,7 +16,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include QMK_KEYBOARD_H
 
-#include "quantum.h"
 #include "rev1.h"
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
@@ -32,7 +31,8 @@ enum layer_names {
 
 enum layer_keycodes {
   BASE = SAFE_RANGE,
-  GAME
+  GAME,
+  OPENRGB
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -106,7 +106,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /*
        ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
-       │Rst│   │MeP│VoD│VoU│Mut│ │Stp│Prv│Ply│Nxt│ │Mai│Hom│Cal│MyC│ │   │   │   │
+       │Rst│   │MeP│VoD│VoU│Mut│ │Stp│Prv│Ply│Nxt│ │Mai│Hom│Cal│Sch│ │   │   │   │
        └───┘   └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┘
        ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───────┐ ┌───┬───┬───┐
        │   │   │   │   │   │   │   │   │   │   │   │Spd│Spi│       │ │Mod│Rod│Tog│
@@ -117,22 +117,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        ├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴────┤     ┌───┐
        │    │   │   │   │   │   │   │   │   │   │   │   │   │      │     │Vai│
        ├────┼───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬──┴─┬────┤ ┌───┼───┼───┐
-       │    │GAME│    │                        │    │ Fn │    │    │ │Hui│Vad│Hud│
+       │    │GAME│    │                        │    │ Fn │    │    │ │Hud│Vad│Hui│
        └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘
 */
     /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15        16     */
     [_FL]   = LAYOUT_all(
-                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_MYCM, _______, _______,  _______,
+                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_WSCH, _______, _______,  _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_MOD, RGB_RMOD, RGB_TOG,
-                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,
+                _______, _______, _______, _______, _______, _______, _______, _______, _______, OPENRGB, _______, _______, _______, _______, _______, _______,  _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
-                _______, GAME,    _______,                            _______,                            _______, MO(_FL), _______, _______, RGB_HUI, RGB_VAD,  RGB_HUD
+                _______, GAME,    _______,                            _______,                            _______, MO(_FL), _______, _______, RGB_HUD, RGB_VAD,  RGB_HUI
             ),
 
 /*
        ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
-       │Rst│   │MeP│VoD│VoU│Mut│ │Stp│Prv│Ply│Nxt│ │Mai│Hom│Cal│MyC│ │   │   │   │
+       │Rst│   │MeP│VoD│VoU│Mut│ │Stp│Prv│Ply│Nxt│ │Mai│Hom│Cal│Sch│ │   │   │   │
        └───┘   └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┘
        ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───────┐ ┌───┬───┬───┐
        │   │   │   │   │   │   │   │   │   │   │   │Spd│Spi│       │ │Mod│Rod│Tog│
@@ -143,17 +143,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        ├────┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴────┤     ┌───┐
        │    │   │   │   │   │   │   │   │   │   │   │   │   │      │     │Vai│
        ├────┼───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬──┴─┬────┤ ┌───┼───┼───┐
-       │    │BASE│    │                        │    │ Fn │    │    │ │Hui│Vad│Hud│
+       │    │BASE│    │                        │    │ Fn │    │    │ │Hud│Vad│Hui│
        └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘
 */
     /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15        16     */
     [_CL]   = LAYOUT_all(
-                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_MYCM, _______, _______,  _______,
+                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_WSCH, _______, _______,  _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_MOD, RGB_RMOD, RGB_TOG,
-                _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,
+                _______, _______, _______, _______, _______, _______, _______, _______, _______, OPENRGB, _______, _______, _______, _______, _______, _______,  _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          RGB_VAI,
-                _______, BASE,    _______,                            _______,                            _______, MO(_CL), _______, _______, RGB_HUI, RGB_VAD,  RGB_HUD
+                _______, BASE,    _______,                            _______,                            _______, MO(_CL), _______, _______, RGB_HUD, RGB_VAD,  RGB_HUI
             ),
 };
 
@@ -171,6 +171,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		writePinLow(D6);
 		writePinLow(D7);
       }
+      return false;
+      break;
+	case OPENRGB:
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_OPENRGB_DIRECT);
       return false;
       break;
   }
