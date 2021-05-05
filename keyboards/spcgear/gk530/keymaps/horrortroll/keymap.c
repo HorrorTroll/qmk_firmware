@@ -46,7 +46,6 @@ enum layer_names {
 enum layer_keycodes {
   BASE = SAFE_RANGE,
   GAME,
-  OPENRGB,
   G1_HUI,                 //Custom gradient color 1 hue increase
   G1_HUD,                 //Custom gradient color 1 hue decrease
   G1_SAI,                 //Custom gradient color 1 saturation increase
@@ -73,8 +72,8 @@ enum layer_keycodes {
   RGB_C_G,                //Change effect to custom gradient
   RGB_D,                  //Change effect to diagonal
   RGB_R_R,                //Change effect to rainbow reactive simple
-  RGB_K                   //Change effect to knight rider
-  
+  RGB_K,                  //Change effect to knight rider
+  OPENRGB                 //Change effect to direct mode
 };
 // readability
 #define XXX KC_NO

@@ -301,29 +301,26 @@ OSAL_IRQ_HANDLER(SN32_CT16B0_HANDLER) {
     // Turn the next row on
     current_row = (current_row + 1) % LED_MATRIX_ROWS_HW;
 
-    if(current_row == 0)
-    {
-        // Read the key matrix
-        for (uint8_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
-            // Enable the column
-            writePinLow(col_pins[col_index]);
+    // Read the key matrix
+    for (uint8_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
+		// Enable the column
+		writePinLow(col_pins[col_index]);
 
-            for (uint8_t row_index = 0; row_index < MATRIX_ROWS; row_index++) {
-                // Check row pin state
-                if (readPin(row_pins[row_index]) == 0) {
-                    // Pin LO, set col bit
-                    raw_matrix[row_index] |= (MATRIX_ROW_SHIFTER << col_index);
-                } else {
-                    // Pin HI, clear col bit
-                    raw_matrix[row_index] &= ~(MATRIX_ROW_SHIFTER << col_index);
-                }
+		for (uint8_t row_index = 0; row_index < MATRIX_ROWS; row_index++) {
+            // Check row pin state
+            if (readPin(row_pins[row_index]) == 0) {
+                // Pin LO, set col bit
+                raw_matrix[row_index] |= (MATRIX_ROW_SHIFTER << col_index);
+            } else {
+                // Pin HI, clear col bit
+                raw_matrix[row_index] &= ~(MATRIX_ROW_SHIFTER << col_index);
             }
+		}
 
-            // Disable the column
-            for (uint8_t delay_idx = 0; delay_idx < 20; delay_idx++)
-            {
-                writePinHigh(col_pins[col_index]);
-            }
+		// Disable the column
+		for (uint8_t delay_idx = 0; delay_idx < 20; delay_idx++)
+		{
+            writePinHigh(col_pins[col_index]);
 		}
     }
 
