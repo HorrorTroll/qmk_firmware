@@ -5,6 +5,7 @@ on:
     branches:
     - sn32
     - sn32_openrgb
+    - orgb
   pull_request:
     branches:
     - sn32
