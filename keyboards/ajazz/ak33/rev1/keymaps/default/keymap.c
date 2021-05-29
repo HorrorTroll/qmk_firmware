@@ -121,7 +121,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     KC_INS,   KC_PSCR,  XXX},
                 { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     XXX,      XXX,      XXX},
                 { XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     XXX,      RGB_VAI,  XXX},
-                { XXX,     GAME,    XXX,     XXX,     XXX,     MO(_FL), XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     RGB_SPD,  RGB_VAD,  RGB_SPI}
+                { XXX,     GAME,    XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,     XXX,      XXX,     XXX,     XXX,     XXX,     RGB_SPD,  RGB_VAD,  RGB_SPI}
               },
 
 /*
