@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define LED_MATRIX_COLS 17
 #define LED_MATRIX_COL_PINS { A0, A1, A2, A3, A4, A5, A6, A7, A14, A15, B0, B1, B2, B3, B4, B10, B11 }
 
-#define DRIVER_LED_TOTAL (6*17)
+#define DRIVER_LED_TOTAL (82)
 
 #define LED_CAPS_LOCK_PIN D6
 #define LED_PIN_ON_STATE 0
