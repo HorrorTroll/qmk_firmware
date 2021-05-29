@@ -40,16 +40,28 @@
     GPIO    GND
 */
 
-LED_TYPE led_state[DRIVER_LED_TOTAL];
+LED_TYPE led_state[LED_MATRIX_ROWS * LED_MATRIX_COLS];
+uint8_t led_pos[DRIVER_LED_TOTAL];
 
-void init(void) {}
+void init(void) {
+    unsigned int i = 0;
+    for (unsigned int y = 0; y < LED_MATRIX_ROWS; y++) {
+        for (unsigned int x = 0; x < LED_MATRIX_COLS; x++) {
+            if (g_led_config.matrix_co[y][x] != NO_LED) {
+                led_pos[g_led_config.matrix_co[y][x]] = i;
+            }
+            i++;
+        }
+    }
+}
 
 static void flush(void) {}
 
 void set_color(int index, uint8_t r, uint8_t g, uint8_t b) {
-    led_state[index].r = r;
-    led_state[index].g = g;
-    led_state[index].b = b;
+    int corrected_index = led_pos[index];
+    led_state[corrected_index].r = r;
+    led_state[corrected_index].g = g;
+    led_state[corrected_index].b = b;
 }
 
 static void set_color_all(uint8_t r, uint8_t g, uint8_t b) {
