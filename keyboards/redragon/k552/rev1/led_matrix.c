@@ -41,6 +41,7 @@
 */
 
 LED_TYPE led_state[LED_MATRIX_ROWS * LED_MATRIX_COLS];
+LED_TYPE new_led_state[LED_MATRIX_ROWS * LED_MATRIX_COLS];
 uint8_t led_pos[DRIVER_LED_TOTAL];
 
 void init(void) {
@@ -55,13 +56,16 @@ void init(void) {
     }
 }
 
-static void flush(void) {}
+static void flush(void) {
+    for (int i=0; i<LED_MATRIX_ROWS * LED_MATRIX_COLS; i++)
+        led_state[i] = new_led_state[i];
+}
 
 void set_color(int index, uint8_t r, uint8_t g, uint8_t b) {
     int corrected_index = led_pos[index];
-    led_state[corrected_index].r = r;
-    led_state[corrected_index].g = g;
-    led_state[corrected_index].b = b;
+    new_led_state[corrected_index].r = r;
+    new_led_state[corrected_index].g = g;
+    new_led_state[corrected_index].b = b;
 }
 
 static void set_color_all(uint8_t r, uint8_t g, uint8_t b) {
