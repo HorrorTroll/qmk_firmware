@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "rev1.h"
 
 #define TG_NKRO MAGIC_TOGGLE_NKRO //Toggle 6KRO / NKRO mode
+#define TG_GUI  MAGIC_TOGGLE_GUI  //Toggle NO_GUI / GUI mode
 
 // For CUSTOM_GRADIENT
 HSV gradient_0 = {205, 250, 255};
@@ -38,16 +39,14 @@ typedef struct {
 // entirely and just use numbers.
 enum layer_names {
     _BASE = 0,
-    _GAME = 1,
-    _CSGO = 2,
+    _CSGO = 1,
+	_SWRL = 2,
     _FL = 3,
     _CL = 4
 };
 
 enum layer_keycodes {
-  BASE = SAFE_RANGE,
-  GAME,
-  CSGO,
+  CSGO = SAFE_RANGE,
   G1_HUI,                 //Custom gradient color 1 hue increase
   G1_HUD,                 //Custom gradient color 1 hue decrease
   G1_SAI,                 //Custom gradient color 1 saturation increase
@@ -116,32 +115,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, MO(_FL), KC_APP,  KC_RCTL, KC_LEFT, KC_DOWN,   KC_RIGHT
             ),
 
-/*
-       ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
-       │Esc│   │F1 │F2 │F3 │F4 │ │F5 │F6 │F7 │F8 │ │F9 │F10│F11│F12│ │PSc│Scr│Pse│
-       └───┘   └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┘
-       ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───────┐ ┌───┬───┬───┐
-       │ ` │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │ 7 │ 8 │ 9 │ 0 │ - │ = │ Backsp│ │Ins│Hom│PgU│
-       ├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─────┤ ├───┼───┼───┤
-       │ Tab │ q │ w │ e │ r │ t │ y │ u │ i │ o │ p │ [ │ ] │  \  │ │Del│End│PgD│
-       ├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴─────┤ └───┴───┴───┘
-       │ Caps │ a │ s │ d │ f │ g │ h │ j │ k │ l │ ; │ ' │  Enter │
-       ├──────┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴────────┤     ┌───┐
-       │ LShift │ z │ x │ c │ v │ b │ n │ m │ , │ . │ / │   RShift │     │ ↑ │
-       ├────┬───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬────┬────┤ ┌───┼───┼───┐
-       │LCrl│    │LAlt│         Space          │RAlt│ Fn │ App│RCrl│ │ ← │ ↓ │ → │
-       └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘
-*/
-    /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15         16       */
-    [_GAME] = LAYOUT_ansi(
-                KC_ESC,           KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, KC_SLCK,   KC_PAUSE,
-                KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_INS,  KC_HOME,   KC_PGUP,
-                KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, KC_DEL,  KC_END,    KC_PGDN,
-                KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,
-                KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT,          KC_UP,
-                KC_LCTL, KC_NO,   KC_LALT,                            KC_SPC,                             KC_RALT, MO(_CL), KC_APP,  KC_RCTL, KC_LEFT, KC_DOWN,   KC_RIGHT
-            ),
-
     /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15         16       */
     [_CSGO] = LAYOUT_ansi(
                 KC_ESC,           KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, KC_SLCK,   KC_PAUSE,
@@ -151,31 +124,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 KC_LSFT,          KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT,          KC_UP,
                 KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, MO(_FL), KC_APP,  KC_RCTL, KC_LEFT, KC_DOWN,   KC_RIGHT
             ),
-/*
-       ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
-       │Rst│   │MeP│VoD│VoU│Mut│ │Stp│Prv│Ply│Nxt│ │Mai│Hom│Cal│Sch│ │   │   │   │
-       └───┘   └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┴───┘ └───┴───┴───┘
-       ┌───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───┬───────┐ ┌───┬───┬───┐
-       │   │   │   │   │   │   │   │   │   │   │   │Spd│Spi│       │ │Mod│Rod│Tog│
-       ├───┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─────┤ ├───┼───┼───┤
-       │     │   │   │   │   │   │   │   │   │   │   │   │   │     │ │   │   │   │
-       ├─────┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴┬──┴─────┤ └───┴───┴───┘
-       │      │   │   │   │   │   │   │   │   │   │   │   │        │
-       ├──────┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴────────┤     ┌───┐
-       │        │   │   │   │   │   │   │   │   │   │   │          │     │Vai│
-       ├────┬───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬────┬────┤ ┌───┼───┼───┐
-       │    │GAME│    │                        │    │ Fn │    │    │ │Hud│Vad│Hui│
-       └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘
-*/
-    /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15         16       */
-    [_FL]   = LAYOUT_ansi(
-                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_WSCH, RGB_MOD, RGB_RMOD,  RGB_TOG,
-                TG_NKRO, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_C_G, RGB_D,     RGB_R_R,
-                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, _______, _______, _______, _______, _______, RGB_K,   RGB_R_B,   TG(_CSGO),
-                _______, G2_HUD,  G2_HUI,  G2_SAD,  G2_SAI,  G2_VAD,  G2_VAI,  _______, _______, _______, _______, _______,          _______,
-                _______,          G_PRE,   REF_G,   G_FLIP,  _______, _______, _______, _______, _______, _______, _______,          _______,          RGB_VAI,
-                _______, GAME,    _______,                            _______,                            _______, _______, _______, _______, RGB_HUD, RGB_VAD,   RGB_HUI
-            ),
 
 /*
        ┌───┐   ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┬───┐ ┌───┬───┬───┐
@@ -190,17 +138,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        ├──────┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴─┬─┴────────┤     ┌───┐
        │        │   │   │   │   │   │   │   │   │   │   │          │     │Vai│
        ├────┬───┴┬──┴─┬─┴───┴───┴───┴───┴───┴──┬┴───┼───┴┬────┬────┤ ┌───┼───┼───┐
-       │    │GAME│    │                        │    │ Fn │    │    │ │Hud│Vad│Hui│
+       │    │TGUI│    │                        │    │ Fn │    │    │ │Hud│Vad│Hui│
        └────┴────┴────┴────────────────────────┴────┴────┴────┴────┘ └───┴───┴───┘
 */
-    /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15         16       */
-    [_CL]   = LAYOUT_ansi(
-                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE, KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_WSCH, RGB_MOD, RGB_RMOD,  RGB_TOG,
-                TG_NKRO, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_C_G, RGB_D,     RGB_R_R,
-                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,  G1_VAI,  _______, _______, _______, _______, _______, _______, _______, RGB_K,   RGB_R_B,   TG(_CSGO),
-                _______, G2_HUD,  G2_HUI,  G2_SAD,  G2_SAI,  G2_VAD,  G2_VAI,  _______, _______, _______, _______, _______,          _______,
-                _______,          G_PRE,   REF_G,   G_FLIP,  _______, _______, _______, _______, _______, _______, _______,          _______,          RGB_VAI,
-                _______, BASE,    _______,                            _______,                            _______, _______, _______, _______, RGB_HUD, RGB_VAD,   RGB_HUI
+    /*  Row:    0        1        2        3        4        5          6        7        8        9        10       11       12       13       14       15         16       */
+    [_FL]   = LAYOUT_ansi(
+                RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE,   KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_WSCH, RGB_MOD, RGB_RMOD,  RGB_TOG,
+                TG_NKRO, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_C_G, RGB_D,     RGB_R_R,
+                _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,    G1_VAI,  _______, _______, _______, _______, _______, _______, _______, RGB_K,   RGB_R_B,   TG(_CSGO),
+                _______, G2_HUD,  G2_HUI,  G2_SAD,  G2_SAI,  G2_VAD,    G2_VAI,  _______, _______, _______, _______, _______,          _______,
+                _______,          G_PRE,   REF_G,   G_FLIP,  TG(_SWRL), _______, _______, _______, _______, _______, _______,          _______,          RGB_VAI,
+                _______, TG_GUI,  _______,                              _______,                            _______, _______, _______, _______, RGB_HUD, RGB_VAD,   RGB_HUI
             ),
 };
 
@@ -219,7 +167,7 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
     /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15        16     */
     [_CSGO] = { Red,              ______,  ______,  ______,  ______,  ______,  ______,  ______,  ______,  ______,  Red,     ______,  ______,  ______,  ______,   ______, \
                 ______,  Yellow,  Yellow,  Yellow,  Yellow,  Yellow,  ______,  ______,  ______,  ______,  ______,  Sakura,  Sakura,  ______,  ______,  ______,   ______, \
-                Red,     Violet,  Green,   Violet,  Violet,  ______,  ______,  ______,  ______,  Sakura,  ______,  Sakura,  ______,  ______,  ______,  ______,   ______, \
+                Red,     Violet,  Green,   Violet,  Violet,  ______,  ______,  ______,  ______,  ______,  Sakura,  Sakura,  Sakura,  ______,  ______,  ______,   ______, \
                 ______,  Green,   Green,   Green,   Violet,  Violet,  ______,  ______,  Violet,  ______,  ______,  ______,           ______,                             \
                 Orange,           Blue,    Blue,    Blue,    Blue,    Violet,  ______,  ______,  ______,  ______,  ______,           ______,           ______,           \
                 Orange,  ______,  ______,                             ______,                             ______,  White,   ______,  ______,  ______,  ______,   ______ },
@@ -229,7 +177,7 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
                 ______,  Yellow,  Yellow,  Yellow,  Yellow,  Yellow,  Yellow,  ______,  ______,  ______,  ______,  ______,  ______,  ______,  Sakura,  Sakura,   Sakura, \
                 ______,  Yellow,  Yellow,  Yellow,  Yellow,  Yellow,  Yellow,  ______,  ______,  ______,  ______,  ______,           ______,                             \
                 ______,           Yellow,  Yellow,  Yellow,  ______,  ______,  ______,  ______,  ______,  ______,  ______,           ______,           Orange,           \
-                ______,  Sakura,  ______,                             ______,                             ______,  White,   ______,  ______,  Orange,  Orange,   Orange },
+                ______,  White,   ______,                             ______,                             ______,  White,   ______,  ______,  Orange,  Orange,   Orange },
 };
 
 void set_layer_color(int layer) {
@@ -242,7 +190,7 @@ void set_layer_color(int layer) {
     };
     if (!hsv.h && !hsv.s && !hsv.v) {
         rgb_matrix_set_color( i, 0, 0, 0 );
-    } else{
+    } else {
         RGB rgb = hsv_to_rgb( hsv );
         float f = (float)rgb_matrix_config.hsv.v / UINT8_MAX;
         rgb_matrix_set_color( i, f * rgb.r, f * rgb.g, f * rgb.b );
@@ -266,23 +214,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   uint8_t gp_length = sizeof(gradient_presets)/sizeof(gradient_presets[0]);
 
   switch (keycode) {
-    case BASE:
-      if (record->event.pressed) {
-        set_single_persistent_default_layer(_BASE);
-      }
-      return false;
-      break;
-    case GAME:
-      if (record->event.pressed) {
-        set_single_persistent_default_layer(_GAME);
-		writePinLow(D6);
-		writePinLow(D7);
-      } else {
-        writePinHigh(D6);
-		writePinHigh(D7);
-      }
-      return false;
-      break;
 	case G1_HUI:
       if (record->event.pressed) {
         gradient_0.h += color_adj_step;
@@ -407,10 +338,7 @@ void rgb_matrix_indicators_user(void) {
     case _FL:
       set_layer_color(_FL);
       break;
-    case _CL:
-      set_layer_color(_FL);
-      break;
-	case _CSGO:
+    case _CSGO:
       set_layer_color(_CSGO);
       break;
   }
