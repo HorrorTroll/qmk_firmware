@@ -758,6 +758,7 @@ enum quantum_keycodes {
 
 #define GUI_OFF MAGIC_NO_GUI
 #define GUI_ON MAGIC_UNNO_GUI
+#define GUI_TOG MAGIC_TOGGLE_GUI
 
 #define GE_SWAP MAGIC_SWAP_GRAVE_ESC
 #define GE_NORM MAGIC_UNSWAP_GRAVE_ESC

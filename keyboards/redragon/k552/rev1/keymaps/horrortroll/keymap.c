@@ -18,9 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "rev1.h"
 
-#define TG_NKRO MAGIC_TOGGLE_NKRO //Toggle 6KRO / NKRO mode
-#define TG_GUI  MAGIC_TOGGLE_GUI  //Toggle NO_GUI / GUI mode
-
 // For CUSTOM_GRADIENT
 HSV gradient_0 = {205, 250, 255};
 HSV gradient_100 = {140, 215, 125};
@@ -40,14 +37,11 @@ typedef struct {
 enum layer_names {
     _BASE = 0,
     _CSGO = 1,
-	_SWRL = 2,
-    _FL = 3,
-    _CL = 4
+    _FL = 2,
 };
 
 enum layer_keycodes {
-  CSGO = SAFE_RANGE,
-  G1_HUI,                 //Custom gradient color 1 hue increase
+  G1_HUI = SAFE_RANGE,    //Custom gradient color 1 hue increase
   G1_HUD,                 //Custom gradient color 1 hue decrease
   G1_SAI,                 //Custom gradient color 1 saturation increase
   G1_SAD,                 //Custom gradient color 1 saturation decrease
@@ -144,11 +138,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*  Row:    0        1        2        3        4        5          6        7        8        9        10       11       12       13       14       15         16       */
     [_FL]   = LAYOUT_ansi(
                 RESET,            KC_MSEL, KC_VOLD, KC_VOLU, KC_MUTE,   KC_MSTP, KC_MPRV, KC_MPLY, KC_MNXT, KC_MAIL, KC_WHOM, KC_CALC, KC_WSCH, RGB_MOD, RGB_RMOD,  RGB_TOG,
-                TG_NKRO, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_C_G, RGB_D,     RGB_R_R,
+                NK_TOGG, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, RGB_SPD, RGB_SPI, _______, RGB_C_G, RGB_D,     RGB_R_R,
                 _______, G1_HUD,  G1_HUI,  G1_SAD,  G1_SAI,  G1_VAD,    G1_VAI,  _______, _______, _______, _______, _______, _______, _______, RGB_K,   RGB_R_B,   TG(_CSGO),
                 _______, G2_HUD,  G2_HUI,  G2_SAD,  G2_SAI,  G2_VAD,    G2_VAI,  _______, _______, _______, _______, _______,          _______,
                 _______,          G_PRE,   REF_G,   G_FLIP,  TG(_SWRL), _______, _______, _______, _______, _______, _______,          _______,          RGB_VAI,
-                _______, TG_GUI,  _______,                              _______,                            _______, _______, _______, _______, RGB_HUD, RGB_VAD,   RGB_HUI
+                _______, GUI_TOG, _______,                              _______,                            _______, _______, _______, _______, RGB_HUD, RGB_VAD,   RGB_HUI
             ),
 };
 
