@@ -79,6 +79,7 @@
                 "GD32VF103",
                 "WB32F3G71",
                 "WB32FQ95",
+                "AT32F403A",
                 "atmega16u2",
                 "atmega32u2",
                 "atmega16u4",
@@ -155,6 +156,7 @@
         "bootloader": {
             "type": "string",
             "enum": [
+                "at32-dfu",
                 "atmel-dfu",
                 "bootloadhid",
                 "caterina",

@@ -1,0 +1,9 @@
+{
+    "keyboard_name": "Onekey AT32F403A Eval",
+    "processor": "AT32F403A",
+    "bootloader": "at32-dfu",
+    "matrix_pins": {
+        "cols": ["A6"],
+        "rows": ["A3"]
+    }
+}
