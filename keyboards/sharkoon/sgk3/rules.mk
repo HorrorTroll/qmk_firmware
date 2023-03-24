@@ -28,3 +28,6 @@ LAYOUTS = fullsize_ansi fullsize_iso
 
 # Build ansi by default
 DEFAULT_FOLDER = sharkoon/sgk3/ansi
+
+# ENABLE OPENRGB
+OPENRGB_ENABLE = yes
