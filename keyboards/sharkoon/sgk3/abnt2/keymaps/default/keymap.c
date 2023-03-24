@@ -15,6 +15,7 @@
  */
 
 #include QMK_KEYBOARD_H
+#include "keymap_br_abnt2.h"
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
@@ -80,11 +81,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*  Row:    0        1        2        3        4        5        6        7        8        9        10       11       12       13       14       15        16        17       18       19       20     */
     [_BASE] = LAYOUT_fullsize_abnt2(
                 KC_ESC,           KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR, KC_SLCK,  KC_PAUSE,
-                KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_INS,  KC_HOME,  KC_PGUP,  KC_NLCK, KC_PSLS, KC_PAST, KC_PMNS,
-                KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC,          KC_DEL,  KC_END,   KC_PGDN,  KC_P7,   KC_P8,   KC_P9,   KC_PPLS,
-                KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, KC_NUHS, KC_ENT,                               KC_P4,   KC_P5,   KC_P6,   KC_PDOT,
-                KC_LSFT, KC_NUBS, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_INT1, KC_RSFT,          KC_UP,              KC_P1,   KC_P2,   KC_P3,   KC_PENT,
-                KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, MO(_FN), KC_APP,  KC_RCTL, KC_LEFT, KC_DOWN,  KC_RIGHT,          KC_P0,   KC_PCMM
+                BR_QUOT,  BR_1,    BR_2,    BR_3,    BR_4,    BR_5,    BR_6,    BR_7,    BR_8,    BR_9,    BR_0,    BR_MINS, BR_EQL,  KC_BSPC, KC_INS,  KC_HOME,  KC_PGUP,  KC_NLCK, KC_PSLS, KC_PAST, KC_PMNS,
+                KC_TAB,  BR_Q,    BR_W,    BR_E,    BR_R,    BR_T,    BR_Y,    BR_U,    BR_I,    BR_O,    BR_P,    BR_ACUT, BR_LBRC,          KC_DEL,  KC_END,   KC_PGDN,  KC_P7,   KC_P8,   KC_P9,   KC_PPLS,
+                KC_CAPS, BR_A,    BR_S,    BR_D,    BR_F,    BR_G,    BR_H,    BR_J,    BR_K,    BR_L,    BR_CCED, BR_TILD, KC_NUHS, KC_ENT,                               KC_P4,   KC_P5,   KC_P6,   BR_PDOT,
+                KC_LSFT, BR_BSLS, BR_Z,    BR_X,    BR_C,    BR_V,    BR_B,    BR_N,    BR_M,    BR_COMM, BR_DOT,  BR_SCLN, BR_SLSH, KC_RSFT,          KC_UP,              KC_P1,   KC_P2,   KC_P3,   KC_PENT,
+                KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, MO(_FN), KC_APP,  KC_RCTL, KC_LEFT, KC_DOWN,  KC_RIGHT,          KC_P0,   BR_PCMM
             ),
 
 /*

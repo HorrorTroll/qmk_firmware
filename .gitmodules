@@ -5,7 +5,7 @@
 [submodule "lib/chibios-contrib"]
 	path = lib/chibios-contrib
 	url = https://github.com/SonixQMK/ChibiOS-Contrib
-	branch = sn32_master
+	branch = sn32_develop
 [submodule "lib/googletest"]
 	path = lib/googletest
 	url = https://github.com/qmk/googletest
