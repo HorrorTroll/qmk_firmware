@@ -199,6 +199,57 @@ bool spi_start(pin_t slavePin, bool lsbFirst, uint8_t mode, uint16_t divisor) {
             spiConfig.SSPCR0 |= SPI_SSPCR0_SPH; // Clock phase: sample on second edge transition
             break;
     }
+#elif defined(MCU_SN32)
+        spiConfig.ctrl1 = 0;
+
+    if (lsbFirst) {
+        spiConfig.ctrl1 |= SPI_MLSB_LSB;
+    }
+
+    switch (mode) {
+        case 0:
+            spiConfig.ctrl1 &= ~SPI_CPOL_LOW;
+            spiConfig.ctrl1 &= ~SPI_CPHA_FALLING;
+            break;
+        case 1:
+            spiConfig.ctrl1 &= ~SPI_CPOL_LOW;
+            spiConfig.ctrl1 |= SPI_CPHA_RISING;
+            break;
+        case 2:
+            spiConfig.ctrl1 |= SPI_CPOL_HIGH;
+            spiConfig.ctrl1 &= ~SPI_CPHA_FALLING;
+            break;
+        case 3:
+            spiConfig.ctrl1 |= SPI_CPOL_HIGH;
+            spiConfig.ctrl1 |= SPI_CPHA_RISING;
+            break;
+    }
+
+    switch (roundedDivisor) {
+        case 2:
+            break;
+        case 4:
+            spiConfig.clkdiv |= (1 << 0);
+            break;
+        case 6:
+            spiConfig.clkdiv |= (2 << 0);
+            break;
+        case 8:
+            spiConfig.clkdiv |= (3 << 0);
+            break;
+        case 10:
+            spiConfig.clkdiv |= (4 << 0);
+            break;
+        case 12:
+            spiConfig.clkdiv |= (5 << 0);
+            break;
+        case 14:
+            spiConfig.clkdiv |= (6 << 0);
+            break;
+        case 16:
+            spiConfig.clkdiv |= (7 << 0);
+            break;
+    }
 #else
     spiConfig.cr1 = 0;
 
@@ -260,25 +311,25 @@ bool spi_start(pin_t slavePin, bool lsbFirst, uint8_t mode, uint16_t divisor) {
 
 spi_status_t spi_write(uint8_t data) {
     uint8_t rxData;
-    spiExchange(&SPI_DRIVER, 1, &data, &rxData);
+    spi_lld_exchange(&SPI_DRIVER, 1, &data, &rxData);
 
     return rxData;
 }
 
 spi_status_t spi_read(void) {
     uint8_t data = 0;
-    spiReceive(&SPI_DRIVER, 1, &data);
+    spi_lld_receive(&SPI_DRIVER, 1, &data);
 
     return data;
 }
 
 spi_status_t spi_transmit(const uint8_t *data, uint16_t length) {
-    spiSend(&SPI_DRIVER, length, data);
+    spi_lld_send(&SPI_DRIVER, length, data);
     return SPI_STATUS_SUCCESS;
 }
 
 spi_status_t spi_receive(uint8_t *data, uint16_t length) {
-    spiReceive(&SPI_DRIVER, length, data);
+    spi_lld_receive(&SPI_DRIVER, length, data);
     return SPI_STATUS_SUCCESS;
 }
 

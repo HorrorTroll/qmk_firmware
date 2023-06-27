@@ -31,6 +31,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #elif defined(POINTING_DEVICE_DRIVER_pmw3320)
 #    include "drivers/sensors/pmw3320.h"
 #    define POINTING_DEVICE_MOTION_PIN_ACTIVE_LOW
+#elif defined(POINTING_DEVICE_DRIVER_atg4090)
+#    include "drivers/sensors/atg4090.h"
+#    define POINTING_DEVICE_MOTION_PIN_ACTIVE_LOW
 #elif defined(POINTING_DEVICE_DRIVER_adns9800)
 #    include "spi_master.h"
 #    include "drivers/sensors/adns9800.h"
@@ -60,7 +63,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #        define POINTING_DEVICE_ROTATION_90
 #    endif
 #    define POINTING_DEVICE_MOTION_PIN_ACTIVE_LOW
-#elif defined(POINTING_DEVICE_DRIVER_pmw3360) || defined(POINTING_DEVICE_DRIVER_pmw3389)
+#elif defined(POINTING_DEVICE_DRIVER_pmw3325) || defined(POINTING_DEVICE_DRIVER_pmw3360) || defined(POINTING_DEVICE_DRIVER_pmw3389)
 #    include "spi_master.h"
 #    include "drivers/sensors/pmw33xx_common.h"
 #    define POINTING_DEVICE_MOTION_PIN_ACTIVE_LOW

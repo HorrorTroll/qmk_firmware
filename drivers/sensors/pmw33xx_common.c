@@ -15,8 +15,12 @@
 #include "spi_master.h"
 #include "progmem.h"
 
+#if defined(POINTING_DEVICE_DRIVER_pmw3325)
+extern const uint8_t pmw33xx_firmware_signature[2] PROGMEM;
+#else
 extern const uint8_t pmw33xx_firmware_data[PMW33XX_FIRMWARE_LENGTH] PROGMEM;
 extern const uint8_t pmw33xx_firmware_signature[3] PROGMEM;
+#endif
 
 static const pin_t cs_pins_left[]  = PMW33XX_CS_PINS;
 static const pin_t cs_pins_right[] = PMW33XX_CS_PINS_RIGHT;
@@ -24,8 +28,12 @@ static const pin_t cs_pins_right[] = PMW33XX_CS_PINS_RIGHT;
 static bool in_burst_left[ARRAY_SIZE(cs_pins_left)]   = {0};
 static bool in_burst_right[ARRAY_SIZE(cs_pins_right)] = {0};
 
+#if defined(POINTING_DEVICE_DRIVER_pmw3325)
+bool __attribute__((cold)) pmw33xx_check_signature(uint8_t sensor);
+#else
 bool __attribute__((cold)) pmw33xx_upload_firmware(uint8_t sensor);
 bool __attribute__((cold)) pmw33xx_check_signature(uint8_t sensor);
+#endif
 
 void pmw33xx_set_cpi_all_sensors(uint16_t cpi) {
     for (uint8_t sensor = 0; sensor < pmw33xx_number_of_sensors; sensor++) {
@@ -88,6 +96,16 @@ uint8_t pmw33xx_read(uint8_t sensor, uint8_t reg_addr) {
     return data;
 }
 
+#if defined(POINTING_DEVICE_DRIVER_pmw3325)
+bool pmw33xx_check_signature(uint8_t sensor) {
+    uint8_t signature_dump[2] = {
+        pmw33xx_read(sensor, REG_Product_ID),
+        pmw33xx_read(sensor, REG_Inverse_Product_ID)
+    };
+
+    return memcmp(pmw33xx_firmware_signature, signature_dump, sizeof(signature_dump)) == 0;
+}
+#else
 bool pmw33xx_check_signature(uint8_t sensor) {
     uint8_t signature_dump[3] = {
         pmw33xx_read(sensor, REG_Product_ID),
@@ -126,6 +144,7 @@ bool pmw33xx_upload_firmware(uint8_t sensor) {
 
     return true;
 }
+#endif
 
 bool pmw33xx_init(uint8_t sensor) {
     if (sensor >= pmw33xx_number_of_sensors) {
@@ -154,10 +173,12 @@ bool pmw33xx_init(uint8_t sensor) {
     pmw33xx_read(sensor, REG_Delta_Y_L);
     pmw33xx_read(sensor, REG_Delta_Y_H);
 
+#if defined(POINTING_DEVICE_DRIVER_pmw3360) || defined(POINTING_DEVICE_DRIVER_pmw3389)
     if (!pmw33xx_upload_firmware(sensor)) {
         pd_dprintf("PMW33XX (%d): firmware upload failed!\n", sensor);
         return false;
     }
+#endif
 
     spi_stop();
 
@@ -166,9 +187,11 @@ bool pmw33xx_init(uint8_t sensor) {
 
     wait_ms(1);
 
+#if defined(POINTING_DEVICE_DRIVER_pmw3360) || defined(POINTING_DEVICE_DRIVER_pmw3389)
     pmw33xx_write(sensor, REG_Config2, 0x00);
     pmw33xx_write(sensor, REG_Angle_Tune, CONSTRAIN(ROTATIONAL_TRANSFORM_ANGLE, -127, 127));
     pmw33xx_write(sensor, REG_Lift_Config, PMW33XX_LIFTOFF_DISTANCE);
+#endif
 
     if (!pmw33xx_check_signature(sensor)) {
         pd_dprintf("PMW33XX (%d): firmware signature verification failed!\n", sensor);

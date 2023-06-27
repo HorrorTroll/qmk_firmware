@@ -15,7 +15,9 @@
 #include "spi_master.h"
 #include "util.h"
 
-#if defined(POINTING_DEVICE_DRIVER_pmw3360)
+#if defined(POINTING_DEVICE_DRIVER_pmw3325)
+#    include "pmw3325.h"
+#elif defined(POINTING_DEVICE_DRIVER_pmw3360)
 #    include "pmw3360.h"
 #elif defined(POINTING_DEVICE_DRIVER_pmw3389)
 #    include "pmw3389.h"

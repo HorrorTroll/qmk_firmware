@@ -207,13 +207,31 @@ POINTING_DEVICE_DRIVER = pmw3320
 
 The PMW3320 sensor uses a serial type protocol for communication, and requires an additional light source (it could work without one, but expect it to be out of service early).
 
-| Setting             | Description                                                         | Default                    |
-| ------------------- | ------------------------------------------------------------------- | -------------------------- |
+| Setting            | Description                                                         | Default                    |
+| ------------------ | ------------------------------------------------------------------- | -------------------------- |
 | `PMW3320_SCLK_PIN` | (Required) The pin connected to the clock pin of the sensor.        | `POINTING_DEVICE_SCLK_PIN` |
 | `PMW3320_SDIO_PIN` | (Required) The pin connected to the data pin of the sensor.         | `POINTING_DEVICE_SDIO_PIN` |
 | `PMW3320_CS_PIN`   | (Required) The pin connected to the cable select pin of the sensor. | `POINTING_DEVICE_CS_PIN`   |
 
 The CPI range is 500-3500, in increments of 250. Defaults to 1000 CPI.
+
+### PMW3325 Sensor
+
+To use the PMW3325 sensor, add this to your `rules.mk`
+
+```make
+POINTING_DEVICE_DRIVER = pmw3325
+```
+
+The PMW3325 sensor uses a serial type protocol for communication, and requires an additional light source (it could work without one, but expect it to be out of service early).
+
+| Setting            | Description                                                         | Default                    |
+| ------------------ | ------------------------------------------------------------------- | -------------------------- |
+| `PMW3325_SCLK_PIN` | (Required) The pin connected to the clock pin of the sensor.        | `POINTING_DEVICE_SCLK_PIN` |
+| `PMW3325_SDIO_PIN` | (Required) The pin connected to the data pin of the sensor.         | `POINTING_DEVICE_SDIO_PIN` |
+| `PMW3325_CS_PIN`   | (Required) The pin connected to the cable select pin of the sensor. | `POINTING_DEVICE_CS_PIN`   |
+
+The CPI range is 500-5000, in increments of 500. Defaults to 3000 CPI.
 
 ### PMW 3360 and PMW 3389 Sensor
 

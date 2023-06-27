@@ -1,0 +1,37 @@
+{
+    "keyboard_name": "EM908",
+    "manufacturer": "HorrorTroll",
+    "maintainer": "HorrorTroll",
+    "usb": {
+        "vid": "0x7516",
+        "pid": "0x6666",
+        "device_version": "0.0.1"
+    },
+    "matrix_pins": {
+        "direct": [
+            ["C0", "C9", "C10", "C7", "C6", "C8"]
+        ]
+    },
+    "processor": "SN32F268F",
+    "bootloader": "sn32-dfu",
+    "features": {
+        "bootmagic": true,
+        "mousekey": true,
+        "extrakey": true,
+        "console": false,
+        "command": false,
+        "nkro": true
+    },
+    "layouts": {
+        "LAYOUT": {
+            "layout": [
+                {"x": 0, "y": 0, "h": 2, "matrix": [0, 0]},
+                {"x": 1.5, "y": 0.25, "h": 1.5, "matrix": [0, 1]},
+                {"x": 3, "y": 0, "h": 2, "matrix": [0, 2]},
+                {"x": 0, "y": 2.25, "matrix": [0, 3]},
+                {"x": 1.5, "y": 2.25, "matrix": [0, 4]},
+                {"x": 0, "y": 3.25, "matrix": [0, 5]}
+            ]
+        }
+    }
+}
