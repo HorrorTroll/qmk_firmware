@@ -214,9 +214,9 @@ void is31fl3729_set_led_control_register(uint8_t index, bool red, bool green, bo
     // not the usual per RGB key as per other ISSI drivers
     // only enable them, since they should be default disabled
     // same as divide by 16, >> 4
-    int cs_red   = led.r >> 4;
-    int cs_green = led.g >> 4;
-    int cs_blue  = led.b >> 4;
+    int cs_red   = led.r & 0x0F;
+    int cs_green = led.g & 0x0F;
+    int cs_blue  = led.b & 0x0F;
 
     if (red) {
         g_scaling_registers[led.driver][cs_red] = 0xFF;
