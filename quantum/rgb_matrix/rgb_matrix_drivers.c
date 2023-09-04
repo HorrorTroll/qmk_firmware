@@ -147,14 +147,11 @@ static void init(void) {
 #    endif
 
     for (int index = 0; index < RGB_MATRIX_LED_COUNT; index++) {
-
-        // This only caches it for later
-#    if defined(IS31FL3729)
-        is31fl3729_set_led_control_register(index);
-#    else
         bool enabled = true;
 
-#    if defined(IS31FL3731)
+#    if defined(IS31FL3729)
+        is31fl3729_set_led_control_register(index, enabled, enabled, enabled);
+#    elif defined(IS31FL3731)
         is31fl3731_set_led_control_register(index, enabled, enabled, enabled);
 #    elif defined(IS31FL3733)
         is31fl3733_set_led_control_register(index, enabled, enabled, enabled);
@@ -168,7 +165,6 @@ static void init(void) {
         IS31FL_RGB_set_scaling_buffer(index, enabled, enabled, enabled);
 #    elif defined(CKLED2001)
         ckled2001_set_led_control_register(index, enabled, enabled, enabled);
-#    endif
 #    endif
     }
 
