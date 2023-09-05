@@ -149,6 +149,7 @@ static void init(void) {
     for (int index = 0; index < RGB_MATRIX_LED_COUNT; index++) {
         bool enabled = true;
 
+        // This only caches it for later
 #    if defined(IS31FL3729)
         is31fl3729_set_led_control_register(index, enabled, enabled, enabled);
 #    elif defined(IS31FL3731)
