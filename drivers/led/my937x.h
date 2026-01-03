@@ -10,14 +10,13 @@
  * (GPT) for flushing color data.
  *
  * This driver can support the following MY-SEMI families:
- * - MY937X
+ * - MY9373
+ * - MY9374
  *
- * Although MY937X parts may have two or more instructions, this driver will only
- * require the Data Latch and Global Latch instructions. MBI instructions to
- * write to configuration register is made optional for MBI parts without a
- * (documented) configuration register (such as MBIA043).
+ * MY937X drivers only require the Frame Start, Command Data
+ * and Scan instructions.
  *
- * This driver does not pre-define instructions or configuration settings.
+ * This driver does not pre-define configuration settings.
  */
 
 #include <stdint.h>
@@ -50,12 +49,8 @@
  * - COL2ROW: from MCU-managed column pins to MY937X-managed row pins
  * - ROW2COL: from MCU-managed row pins to MY937X-managed column pins
  */
-#ifndef COL2ROW
-#    define COL2ROW 0
-#endif
-#ifndef ROW2COL
-#    define ROW2COL 1
-#endif
+#define COL2ROW 0
+#define ROW2COL 1
 
 #ifndef MY937X_LED_DIRECTION
 #    error "MY937X_LED_DIRECTION is not defined to either ROW2COL or COL2ROW"
@@ -76,12 +71,8 @@
 #    define MY937X_LED_COUNT (MY937X_NUM_CHANNELS * MY937X_NUM_LED_GPIO_PINS)
 #endif
 
-#ifndef ACTIVE_HIGH
-#    define ACTIVE_HIGH 1
-#endif
-#ifndef ACTIVE_LOW
-#    define ACTIVE_LOW 0
-#endif
+#define ACTIVE_LOW 0
+#define ACTIVE_HIGH 1
 
 #ifdef MY937X_LED_GPIO_ACTIVE_STATE
 #    if (MY937X_LED_GPIO_ACTIVE_STATE != ACTIVE_HIGH) && (MY937X_LED_GPIO_ACTIVE_STATE != ACTIVE_LOW)
@@ -91,7 +82,7 @@
 #    error "MY937X_LED_GPIO_ACTIVE_STATE is not defined"
 #endif
 
-/* PWM driver to use for generating GCLK clock signal */
+/* PWM driver to use for generating GCK clock signal */
 #ifndef MY937X_PWM_DRIVER
 #    error "MY937X_PWM_DRIVER is not defined"
 #endif
@@ -112,10 +103,10 @@
 /* PWM counter frequency in Hz = desired GCK frequency * MY937X_PWM_PERIOD */
 #ifndef MY937X_PWM_COUNTER_FREQUENCY
 /* default: 4 MHz GCK */
-#    define MY937X_PWM_COUNTER_FREQUENCY (4000000UL * MY937X_PWM_PERIOD)
+#    define MY937X_PWM_COUNTER_FREQUENCY (18000000UL * MY937X_PWM_PERIOD)
 #endif
 
-/* GPT timer driver to use for continuous row/column pin cycling and data flushing */
+/* GPT driver to use for continuous row/column pin cycling and data flushing */
 #ifndef MY937X_GPT_DRIVER
 #    error "MY937X_GPT_DRIVER is not defined"
 #endif
@@ -200,42 +191,47 @@
         }                                       \
     } while (0)
 
-/* Send 'instr' number of DCK pulses while LAT is asserted high. */
+/* Send 'instr' number of DCK pulses while LAT is asserted high */
 void my937x_dck_pulses(uint8_t instr);
 
-/* 5 DCK pulses for frame start. */
+/* 5 DCK pulses for frame start */
 void my937x_frame_start(void);
 
+/* Send SDI bit when DCK pulses for command data and scans */
 void my937x_sdi_bit(uint8_t bit);
+
+/* Send 32-bit DCK pulses for command data */
 void my937x_send_32bits(uint32_t word);
+
+/* Send 16-bit DCK pulses for scans */
 void my937x_send_16bits(uint16_t word);
 
-/* Write 32-bit command data to each driver (32 bits × M), then single LAT pulse. */
+/* Write 32-bit command data to each driver (32-bit × M), then single LAT pulse */
 void my937x_command_data(void);
 
+/* Write 16-bit scans to 16 OUT and each driver (16-bit × 16 OUT x M),
+   then single LAT pulse */
 void my937x_scan(uint16_t scan_line[MY937X_NUM_DRIVER][MY937X_NUM_CHANNELS]);
 
-/* initialize my937x driver(s) */
+/* Initialize MY937X driver(s) */
 void my937x_init_drivers(void);
 void my937x_init_pins(void);
 void my937x_init_command_data(void);
 void my937x_init_timers(void);
 
 #if (MY937X_LED_TYPE == MY937X_LED_TYPE_RGB)
-/* write RGB color to back buffer at a specific index */
+/* Write RGB color to back buffer at a specific index */
 void my937x_set_color(int index, uint8_t red, uint8_t green, uint8_t blue);
-/* write RGB color to entire back buffer */
+/* Write RGB color to entire back buffer */
 void my937x_set_color_all(uint8_t red, uint8_t green, uint8_t blue);
 #elif (MY937X_LED_TYPE == MY937X_LED_TYPE_MONO)
-/* write grayscale value to back buffer at a specific index */
+/* Write grayscale value to back buffer at a specific index */
 void my937x_set_value(int index, uint8_t value);
-/* write grayscale value to entire back buffer */
+/* Write grayscale value to entire back buffer */
 void my937x_set_value_all(uint8_t value);
 #endif
-/* updates front buffer from back buffer */
+/* Updates front buffer from back buffer */
 void my937x_flush(void);
-/* activate row/column pin and update buffers for next row/column */
-void my937x_flush_isr(void);
 
 enum my937x_color_ch {
     MY937X_UNUSED_CH,

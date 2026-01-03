@@ -8,8 +8,6 @@
 #include "rgb_matrix.h"
 #include "host.h"
 
-#define NO_LED 255
-
 /*
  * Channel Setup:
  *          ┌────────┐
@@ -17,7 +15,7 @@
  *  R_COL0<-│        │->Unused
  *  G_COL0<-│        │->B_COL4
  *  B_COL0<-│        │->G_COL4
- *  R_COL1<-│ MY9373 │->R_COL4
+ *  R_COL1<-│ MY937X │->R_COL4
  *  G_COL1<-│   A    │->B_COL3
  *  B_COL1<-│        │->G_COL3
  *  R_COL2<-│        │->R_COL3
@@ -28,7 +26,7 @@
  *  R_COL5<-│        │->unused
  *  G_COL5<-│        │->B_COL9
  *  B_COL5<-│        │->G_COL9
- *  R_COL6<-│ MY9373 │->R_COL9
+ *  R_COL6<-│ MY937X │->R_COL9
  *  G_COL6<-│   B    │->B_COL8
  *  B_COL6<-│        │->G_COL8
  *  R_COL7<-│        │->R_COL8
@@ -39,7 +37,7 @@
  * R_COL10<-│        │->unused
  * G_COL10<-│        │->B_COL14
  * B_COL10<-│        │->G_COL14
- * R_COL11<-│ MY9373 │->R_COL14
+ * R_COL11<-│ MY937X │->R_COL14
  * G_COL11<-│   C    │->B_COL13
  * B_COL11<-│        │->G_COL13
  * R_COL12<-│        │->R_COL13
@@ -124,11 +122,5 @@ const uint8_t g_my937x_led_matrix_co[MY937X_NUM_LED_GPIO_PINS][MY937X_NUM_CHANNE
 };
 // clang-format on
 
-// Caps lock indicator light
-//bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
-//    uint8_t val = host_keyboard_led_state().caps_lock ? 0xff : 0x0;
-//    rgb_matrix_set_color(29, val, val, val);
-//    return rgb_matrix_indicators_advanced_user(led_min, led_max);
-//}
 
 #endif

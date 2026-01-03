@@ -21,7 +21,7 @@
         "bootmagic": true,
         "mousekey": true,
         "extrakey": true,
-        "console": false,
+        "console": true,
         "command": false,
         "nkro": true,
         "encoder": true,
@@ -44,6 +44,9 @@
     },
     "rgb_matrix": {
         "driver": "my937x",
+        "default": {
+            "val": 239
+        },
         "animations": {
             "alphas_mods": true,
             "gradient_up_down": true,
