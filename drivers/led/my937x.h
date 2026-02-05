@@ -22,27 +22,19 @@
 #include <stdint.h>
 #include "gpio.h"
 
-/* number of output channels of a single MY937X */
+/* Setting command data of MY937X(s) */
+#ifndef MY937X_COMMAND_DATA
+#    define MY937X_COMMAND_DATA 0x0000803F // 0b00000000000000001000000000111111 (Default)
+#endif
+
+/* Number of output channels of a single MY937X */
 #ifndef MY937X_NUM_CHANNELS
 #    error "MY937X_NUM_CHANNELS is not defined"
 #endif
 
-/* number of MY937X(s) */
+/* Number of MY937X(s) */
 #ifndef MY937X_NUM_DRIVER
 #    error "MY937X_NUM_DRIVER is not defined"
-#endif
-
-/* RGB or Grayscale (mono) LEDs */
-#define MY937X_LED_TYPE_MONO 0
-#define MY937X_LED_TYPE_RGB 1
-
-/* Select between Mono or RGB type driver */
-#ifdef MY937X_LED_TYPE
-#    if (MY937X_LED_TYPE != MY937X_LED_TYPE_RGB) && (MY937X_LED_TYPE != MY937X_LED_TYPE_MONO)
-#        error "MY937X_LED_TYPE is not defined to either MY937X_LED_TYPE_RGB or MY937X_LED_TYPE_MONO"
-#    endif
-#else
-#    error "MY937X_LED_TYPE is not defined to either MY937X_LED_TYPE_RGB or MY937X_LED_TYPE_MONO"
 #endif
 
 /* LED matrix directions:
@@ -102,8 +94,8 @@
 
 /* PWM counter frequency in Hz = desired GCK frequency * MY937X_PWM_PERIOD */
 #ifndef MY937X_PWM_COUNTER_FREQUENCY
-/* default: 4 MHz GCK */
-#    define MY937X_PWM_COUNTER_FREQUENCY (18000000UL * MY937X_PWM_PERIOD)
+/* Default: 4 MHz GCK */
+#    define MY937X_PWM_COUNTER_FREQUENCY (4000000UL * MY937X_PWM_PERIOD)
 #endif
 
 /* GPT driver to use for continuous row/column pin cycling and data flushing */
@@ -118,7 +110,7 @@
 
 /* Timer counter frequency in Hz = desired LED refresh rate * MY937X_NUM_LED_GPIO_PINS * MY937X_GPT_PERIOD */
 #ifndef MY937X_GPT_COUNTER_FREQUENCY
-/* default: 120 Hz LED refresh rate */
+/* Default: 120 Hz LED refresh rate */
 #    define MY937X_GPT_COUNTER_FREQUENCY (120UL * MY937X_NUM_LED_GPIO_PINS * MY937X_GPT_PERIOD)
 #endif
 
@@ -172,9 +164,8 @@
 #    elif defined(PROTOCOL_CHIBIOS)
 #        include "hal.h"
 #        include "chibios_config.h"
-#        if defined(AT32F415)
-#            define MY937X_NOPS ((50 + MY937X_NOPS_PER_LOOP - 1) / MY937X_NOPS_PER_LOOP) // This calculates how many loops of 3 nops to run to delay 50 ns
-#            define MY937X_NOPS_PER_LOOP (1000000000L / (CPU_CLOCK / 3))
+#        if defined(STM32F0XX) || defined(STM32F1XX) || defined(STM32F3XX) || defined(STM32F4XX) || defined(STM32L0XX) || defined(AT32F415) || defined(GD32VF103) || defined(MCU_RP)
+#            define MY937X_NOPS (60 / (1000000000L / (CPU_CLOCK / 3))) // This calculates how many loops of 3 nops to run to delay 60 ns
 #        else
 #            error MY937X_NOPS configuration required
 #            define MY937X_NOPS 0 // this just pleases the compile so the above error is easier to spot
@@ -219,23 +210,15 @@ void my937x_init_pins(void);
 void my937x_init_command_data(void);
 void my937x_init_timers(void);
 
-#if (MY937X_LED_TYPE == MY937X_LED_TYPE_RGB)
 /* Write RGB color to back buffer at a specific index */
 void my937x_set_color(int index, uint8_t red, uint8_t green, uint8_t blue);
 /* Write RGB color to entire back buffer */
 void my937x_set_color_all(uint8_t red, uint8_t green, uint8_t blue);
-#elif (MY937X_LED_TYPE == MY937X_LED_TYPE_MONO)
-/* Write grayscale value to back buffer at a specific index */
-void my937x_set_value(int index, uint8_t value);
-/* Write grayscale value to entire back buffer */
-void my937x_set_value_all(uint8_t value);
-#endif
 /* Updates front buffer from back buffer */
 void my937x_flush(void);
 
 enum my937x_color_ch {
     MY937X_UNUSED_CH,
-    MY937X_MONO_CH,
     MY937X_RED_CH,
     MY937X_GREEN_CH,
     MY937X_BLUE_CH,

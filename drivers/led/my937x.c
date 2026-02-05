@@ -25,13 +25,9 @@ static PWMConfig gck_pwm_config = {
 };
 
 typedef struct {
-#if (MY937X_LED_TYPE == MY937X_LED_TYPE_RGB)
     uint16_t r;
     uint16_t g;
     uint16_t b;
-#elif (MY937X_LED_TYPE == MY937X_LED_TYPE_MONO)
-    uint16_t v;
-#endif
 } my937x_led_t;
 
 // my937x_leds[0]: back buffer
@@ -73,9 +69,6 @@ static void my937x_gpt_flush_isr(GPTDriver *gptp) {
     /* Send frame start */
     my937x_frame_start();
 
-    /* Start GCK frame (50% PWM duty cycle) */
-    pwmEnableChannel(&MY937X_PWM_DRIVER, MY937X_PWM_CHANNEL - 1, PWM_PERCENTAGE_TO_WIDTH(&MY937X_PWM_DRIVER, 5000));
-
     /* Send command data */
     my937x_command_data();
 
@@ -104,7 +97,6 @@ static void my937x_gpt_flush_isr(GPTDriver *gptp) {
             led_idx = g_my937x_led_matrix_co[my937x_ch_idx][led_gpio_idx];
 #endif
             switch (color_ch) {
-#if (MY937X_LED_TYPE == MY937X_LED_TYPE_RGB)
                 case MY937X_RED_CH:
                     color_val = pgm_read_word(&CIE1931_16_CURVE[my937x_leds[1][led_idx].r]);
                     break;
@@ -114,11 +106,6 @@ static void my937x_gpt_flush_isr(GPTDriver *gptp) {
                 case MY937X_BLUE_CH:
                     color_val = pgm_read_word(&CIE1931_16_CURVE[my937x_leds[1][led_idx].b]);
                     break;
-#elif (MY937X_LED_TYPE == MY937X_LED_TYPE_MONO)
-                case MY937X_MONO_CH:
-                    color_val = pgm_read_word(&CIE1931_16_CURVE[my937x_leds[1][led_idx].v]);
-                    break;
-#endif
                 case MY937X_UNUSED_CH:
                 default:
                     color_val = 0;
@@ -129,6 +116,9 @@ static void my937x_gpt_flush_isr(GPTDriver *gptp) {
     }
 
     my937x_scan(scan_data[led_gpio_idx]);
+
+    /* Start GCK frame (50% PWM duty cycle) */
+    pwmEnableChannel(&MY937X_PWM_DRIVER, MY937X_PWM_CHANNEL - 1, PWM_PERCENTAGE_TO_WIDTH(&MY937X_PWM_DRIVER, 5000));
 
     /* Disable SDI and DCK pin */
     gpio_write_pin_low(MY937X_SDI_PIN);
@@ -255,7 +245,6 @@ __attribute__((weak)) void my937x_init_drivers(void) {
     my937x_init_timers();
 }
 
-#if (MY937X_LED_TYPE == MY937X_LED_TYPE_RGB)
 void my937x_set_color(int index, uint8_t red, uint8_t green, uint8_t blue) {
     my937x_leds[0][index].r = red;
     my937x_leds[0][index].g = green;
@@ -267,18 +256,6 @@ void my937x_set_color_all(uint8_t red, uint8_t green, uint8_t blue) {
         my937x_set_color(i, red, green, blue);
     }
 }
-
-#elif (MY937X_LED_TYPE == MY937X_LED_TYPE_MONO)
-void my937x_set_value(int index, uint8_t value) {
-    my937x_leds[0][index].v = value;
-}
-
-void my937x_set_value_all(uint8_t value) {
-    for (int i = 0; i < MY937X_LED_COUNT; i++) {
-        my937x_set_value(i, value);
-    }
-}
-#endif
 
 void my937x_flush(void) {
     memcpy(&my937x_leds[1], &my937x_leds[0], MY937X_LED_COUNT * sizeof(my937x_led_t));
