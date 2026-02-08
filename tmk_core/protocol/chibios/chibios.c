@@ -183,21 +183,15 @@ void protocol_pre_task(void) {
             /* Remote wakeup */
             if (suspend_wakeup_condition() && (USB_DRIVER.status & USB_GETSTATUS_REMOTE_WAKEUP_ENABLED)) {
                 usbWakeupHost(&USB_DRIVER);
-#    if USB_SUSPEND_WAKEUP_DELAY > 0
-                // Some hubs, kvm switches, and monitors do
-                // weird things, with USB device state bouncing
-                // around wildly on wakeup, yielding race
-                // conditions that can corrupt the keyboard state.
-                //
-                // Pause for a while to let things settle...
-                wait_ms(USB_SUSPEND_WAKEUP_DELAY);
-                // ...and then update the wakeup matrix again as the waking key
-                // might have been released during the delay
-                update_matrix_state_after_wakeup();
-#    endif
+                restart_usb_driver(&USB_DRIVER);
             }
         }
         /* Woken up */
+        // variables has been already cleared by the wakeup hook
+        send_keyboard_report();
+#    ifdef MOUSEKEY_ENABLE
+        mousekey_send();
+#    endif /* MOUSEKEY_ENABLE */
     }
 #endif
 }
@@ -206,5 +200,7 @@ void protocol_post_task(void) {
 #ifdef VIRTSER_ENABLE
     virtser_task();
 #endif
-    usb_idle_task();
+#ifdef RAW_ENABLE
+    raw_hid_task();
+#endif
 }

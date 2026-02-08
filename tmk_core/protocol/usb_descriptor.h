@@ -196,8 +196,6 @@ enum usb_interfaces {
     TOTAL_INTERFACES
 };
 
-#define IS_VALID_INTERFACE(i) ((i) >= 0 && (i) < TOTAL_INTERFACES)
-
 #define NEXT_EPNUM __COUNTER__
 
 /*
