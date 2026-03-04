@@ -1,0 +1,78 @@
+{
+    "keyboard_name": "Victor EM908",
+    "manufacturer": "HorrorTroll",
+    "maintainer": "HorrorTroll",
+    "usb": {
+        "vid": "0x260D",
+        "pid": "0x1003",
+        "device_version": "0.0.1"
+    },
+    "matrix_pins": {
+        "direct": [
+            ["C0", "C10", "C9", "C8", "C6", "C7", null, null, null, null, null, null, null, null]
+        ]
+    },
+    "processor": "SN32F268F",
+    "bootloader": "sn32-dfu",
+    "features": {
+        "bootmagic": false,
+        "mousekey": true,
+        "extrakey": false,
+        "console": false,
+        "command": false,
+        "nkro": false,
+        "space_cadet": false,
+        "grave_esc": false,
+        "encoder": true,
+        "pointing_device": true,
+        "rgb_matrix": true
+    },
+    "encoder": {
+        "rotary": [
+            {"pin_a": "C2", "pin_b": "C1", "resolution": 2}
+        ]
+    },
+    "rgb_matrix": {
+        "driver": "custom",
+        "default": {
+            "animation": "cycle_up_down"
+        },
+        "animations": {
+            "gradient_up_down": true,
+            "breathing": true,
+            "cycle_all": true,
+            "cycle_up_down": true
+        },
+        "layout": [
+            {"matrix": [0, 0], "x":14, "y":0, "flags":4},
+            {"matrix": [0, 1], "x":28, "y":14, "flags":4},
+            {"matrix": [0, 2], "x":28, "y":28, "flags":4},
+            {"matrix": [0, 3], "x":0, "y":46, "flags":4},
+            {"matrix": [0, 4], "x":0, "y":58, "flags":4},
+            {"matrix": [0, 5], "x":42, "y":64, "flags":4},
+            {"matrix": [0, 6], "x":112, "y":58, "flags":4},
+            {"matrix": [0, 7], "x":182, "y":64, "flags":4},
+            {"matrix": [0, 8], "x":224, "y":58, "flags":4},
+            {"matrix": [0, 9], "x":224, "y":46, "flags":4},
+            {"matrix": [0, 10], "x":196, "y":28, "flags":4},
+            {"matrix": [0, 11], "x":196, "y":16, "flags":4},
+            {"matrix": [0, 12], "x":196, "y":14, "flags":4},
+            {"matrix": [0, 13], "x":210, "y":0, "flags":4}
+        ]
+    },
+    "eeprom": {
+        "driver": "custom"
+    },
+    "layouts": {
+        "LAYOUT": {
+            "layout": [
+                {"x": 0, "y": 0, "h": 1.5, "matrix": [0, 0]},
+                {"x": 1.5, "y": 0.25, "h": 1, "matrix": [0, 1]},
+                {"x": 3, "y": 0, "h": 1.5, "matrix": [0, 2]},
+                {"x": 0, "y": 2.25, "matrix": [0, 3]},
+                {"x": 1.5, "y": 2.25, "matrix": [0, 4]},
+                {"x": 0, "y": 3.25, "matrix": [0, 5]}
+            ]
+        }
+    }
+}
