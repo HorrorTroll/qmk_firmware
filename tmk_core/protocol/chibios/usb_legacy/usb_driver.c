@@ -378,7 +378,7 @@ void qmkusbSOFHookI(QMKUSBDriver *qmkusbp) {
  * @param[in] ep        IN endpoint number
  */
 void qmkusbDataTransmitted(USBDriver *usbp, usbep_t ep) {
-    uint8_t *     buf;
+    uint8_t      *buf;
     size_t        n;
     QMKUSBDriver *qmkusbp = usbp->in_params[ep - 1U];
 
