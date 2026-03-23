@@ -3,18 +3,28 @@ CHIBIOS_DIR = $(PROTOCOL_DIR)/chibios
 
 
 ifneq ($(filter $(MCU_SERIES),SN32F260),)
-SRC += $(CHIBIOS_DIR)/usb_legacy/usb_main.c
-SRC += $(CHIBIOS_DIR)/usb_legacy/chibios.c
-SRC += usb_descriptor.c
-SRC += $(CHIBIOS_DIR)/usb_legacy/usb_driver.c
+    CHIBIOS_USB_PROTOCOL ?= legacy
+    ifeq ($(strip $(CHIBIOS_USB_PROTOCOL)), legacy)
+        SRC += $(CHIBIOS_DIR)/usb_legacy/usb_main.c
+        SRC += $(CHIBIOS_DIR)/usb_legacy/chibios.c
+        SRC += usb_descriptor.c
+        SRC += $(CHIBIOS_DIR)/usb_legacy/usb_driver.c
+    else ifeq ($(strip $(CHIBIOS_USB_PROTOCOL)), async)
+        USB_ASYNC_ENABLE := yes
+    endif
 else
-SRC += $(CHIBIOS_DIR)/usb_main.c
-SRC += $(CHIBIOS_DIR)/chibios.c
-SRC += usb_descriptor.c
-SRC += $(CHIBIOS_DIR)/usb_driver.c
-SRC += $(CHIBIOS_DIR)/usb_endpoints.c
-SRC += $(CHIBIOS_DIR)/usb_report_handling.c
+    USB_ASYNC_ENABLE := yes
 endif
+
+ifeq ($(strip $(USB_ASYNC_ENABLE)), yes)
+    SRC += $(CHIBIOS_DIR)/usb_main.c
+    SRC += $(CHIBIOS_DIR)/chibios.c
+    SRC += usb_descriptor.c
+    SRC += $(CHIBIOS_DIR)/usb_driver.c
+    SRC += $(CHIBIOS_DIR)/usb_endpoints.c
+    SRC += $(CHIBIOS_DIR)/usb_report_handling.c
+endif
+
 SRC += $(CHIBIOS_DIR)/usb_util.c
 SRC += $(LIBSRC)
 
